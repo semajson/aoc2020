@@ -107,7 +107,7 @@ def parse_input(input):
     root_node = TreeNode(bag_colour="root")
 
     # Make all the nodes in the tree first (without relationships)
-    # We can't do this in one step as the input file isn't ordered
+    # We can't create the relationships here as well as the input file isn't ordered
     node_dict = {"root": root_node}
     for line in input:
         bag_colour, child_bag_dicts = parse_line(line)
