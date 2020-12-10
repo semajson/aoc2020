@@ -1,12 +1,14 @@
 import re
 import sys
 
+sys.path.append("c:\\Users\\james_pc\\projects\\aoc2020\\")
 sys.path.append("./..")
+
 from utils import time_algo
 
+PATH = "day7/"
+
 # Part 1
-
-
 def get_input(filename):
     my_file = open(filename, "r")
     content = my_file.readlines()
@@ -145,16 +147,16 @@ if __name__ == "__main__":
 
     # print(get_input("test_input"))
 
-    test_input = parse_input(get_input("test_input"))
+    test_input = parse_input(get_input(PATH + "test_input"))
     print(part1_solve(test_input))
 
-    real_input = parse_input(get_input("real_input"))
+    real_input = parse_input(get_input(PATH + "real_input"))
     print(part1_solve(real_input))
 
-    test_input = parse_input(get_input("test_input"))
+    test_input = parse_input(get_input(PATH + "test_input"))
     print(part2_solve(test_input))
 
-    real_input = parse_input(get_input("real_input"))
+    real_input = parse_input(get_input(PATH + "real_input"))
     print(part2_solve(real_input))
 
     # real_input = parse_input(get_input("real_input"))
