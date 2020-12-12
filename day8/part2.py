@@ -31,6 +31,16 @@ class Command:
 
         return index, accumulator
 
+    def swap_command(self):
+        if self.c_type == "jmp":
+            self.c_type = "nop"
+        elif self.c_type == "nop":
+            self.c_type = "jmp"
+
+    def swap_command_back(self):
+        # As swap_command is symmetric, just call it again
+        self.swap_command()
+
 
 def part1_solve(commands):
     commands_completed = []
@@ -96,22 +106,13 @@ def run_commands(commands):
 
 def part2_solve(commands):
     # Loop through all commands
-    # If command "jmp", replace with "nop"
-    # If command "nop", replace with "jop"
+    # Alter command
     # If no infinte loop, we have fixed the code!
     for command in commands:
-        if command.c_type == "jmp":
-            command.c_type = "nop"
-            if not is_infinite_loop(commands):
-                break
-            command.c_type = "jmp"
-
-        if command.c_type == "nop":
-            command.c_type = "jmp"
-
-            if not is_infinite_loop(commands):
-                break
-            command.c_type = "nop"
+        command.swap_command()
+        if not is_infinite_loop(commands):
+            break
+        command.swap_command_back()
 
     # We should have fixed code, now run it
     return run_commands(commands)
