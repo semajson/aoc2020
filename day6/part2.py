@@ -6,6 +6,9 @@ from utils import time_algo
 # Part 1
 
 
+# make this more classy
+
+
 def get_input(filename):
     my_file = open(filename, "r")
     content = my_file.readlines()

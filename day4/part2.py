@@ -5,6 +5,8 @@ from utils import time_algo
 
 # Part 1
 
+# use classes more here
+
 
 def get_input(filename):
     my_file = open(filename, "r")
