@@ -168,16 +168,23 @@ def part2_solve_v3(busses, offsets):
     # Say we have the equations
     # T = 3x
     # Here, T=3 is a solution (here x =1)
+    # We can also write this as T (mod 3) = 0
     #
     # Now if also
     # T = 1 + 4y
+    # or T (mod 4) = 1
     # The previous answer T= 3 isn't solution, but if find a solution T = a * 3 where a is int
     # where this equation is satisfied, the first equation will still be satisfied
+    # Timesing T by an arbitrary number 3 has no affect on T (mod 3) =0, as a*0 = 0
     #
     # Now if also:
     # T = 2 + 5z
+    # T (mod 5) = 2
     # The we can iterate through T = a * 3 * 4 till we find a solution.
     # Importantly, all the other equations will still be satisfied.
+    # T (mod 4) = 1 is still value, as timsing by 12 (3*4) will NOT affect modulo
+    # as 12 is a multiple of 4
+    #
     #
     # So loop through the busses finding a first_bus_leave time that works.
     # Use the product from the previous buses as the "period here".
