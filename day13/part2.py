@@ -189,6 +189,8 @@ def part2_solve_v3(busses, offsets):
     # So loop through the busses finding a first_bus_leave time that works.
     # Use the product from the previous buses as the "period here".
     # So that the next solutuion we guess is current_period * a where we iterate a
+    #
+    # After more research, this is https://en.wikipedia.org/wiki/Chinese_remainder_theorem#Search_by_sieving
     first_bus_leave = None
     current_period = None
 
