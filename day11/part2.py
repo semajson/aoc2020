@@ -20,7 +20,7 @@ def get_input(filename):
 
 
 @dataclass
-class SurrSeats:
+class SeatsInfo:
     empty_count: 0
     occ_count: 0
     floor_count: 0
@@ -37,7 +37,7 @@ class SurrSeats:
 
 
 def get_surr_seats(row, col, seats):
-    surr_seats = SurrSeats(empty_count=0, occ_count=0, floor_count=0)
+    surr_seats = SeatsInfo(empty_count=0, occ_count=0, floor_count=0)
 
     for surr_row in range(row - 1, row + 2):
         for surr_col in range(col - 1, col + 2):
@@ -48,6 +48,7 @@ def get_surr_seats(row, col, seats):
                 # this is the current seat, ignore
                 continue
             if (surr_row < 0) or (surr_col < 0):
+                # Is the wall, ignore
                 continue
             try:
                 surr_status = seats[surr_row][surr_col]
@@ -60,7 +61,7 @@ def get_surr_seats(row, col, seats):
     return surr_seats
 
 
-def get_dir_view_seats(row, col, dir, seats, view_seats):
+def get_seat_in_dir(row, col, dir, seats, view_seats):
 
     while True:
         row += dir[0]
@@ -83,7 +84,7 @@ def get_dir_view_seats(row, col, dir, seats, view_seats):
 
 
 def get_view_seats(row, col, seats):
-    view_seats = SurrSeats(empty_count=0, occ_count=0, floor_count=0)
+    view_seats = SeatsInfo(empty_count=0, occ_count=0, floor_count=0)
 
     # loop over the possible 8 directions, and get the seats in that view
     for row_dir in range(-1, 2):
@@ -94,7 +95,7 @@ def get_view_seats(row, col, seats):
                 continue
             dir = [row_dir, col_dir]
 
-            get_dir_view_seats(row, col, dir, seats, view_seats)
+            get_seat_in_dir(row, col, dir, seats, view_seats)
 
     return view_seats
 
@@ -125,9 +126,11 @@ def updates_all_seats_status(seats):
 
     for i in range(len(seats)):
         for j in range(len(seats[i])):
-            prev_status = seats[i][j]
+            # Update seat
             new_seats[i][j] = update_seat_status(i, j, seats)
 
+            # Check if the seat status changed
+            prev_status = seats[i][j]
             if prev_status != new_seats[i][j]:
                 seats_changed = 1
 
@@ -141,7 +144,7 @@ def part2_solve(seats):
     while seats_changed != 0:
         seats_changed, seats = updates_all_seats_status(seats)
 
-    # Now stable, count the seats
+    # Now stable, count the occupied seats
     count = 0
     for row in seats:
         for seat in row:

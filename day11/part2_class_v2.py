@@ -99,7 +99,7 @@ class Seat:
 
         return surr_seats
 
-    def get_dir_view_seats(self, row, col, dir, seats, view_seats):
+    def get_seat_in_dir(self, row, col, dir, seats, view_seats):
 
         while True:
             row += dir[0]
@@ -132,7 +132,7 @@ class Seat:
                     continue
                 dir = [row_dir, col_dir]
 
-                self.get_dir_view_seats(row, col, dir, seats, view_seats)
+                self.get_seat_in_dir(row, col, dir, seats, view_seats)
 
         return view_seats
 
@@ -146,9 +146,11 @@ def updates_all_seats_status(seats):
 
     for i in range(len(seats)):
         for j in range(len(seats[i])):
-            prev_seat = seats[i][j]
+            # update seat
             new_seat = new_seats[i][j]
 
+            # Check if seat status has changed
+            prev_seat = seats[i][j]
             new_seat.update_seat_status(i, j, seats)
 
             if prev_seat.is_occ != new_seat.is_occ:
@@ -164,7 +166,7 @@ def part2_solve(seats):
     while seats_changed != 0:
         seats_changed, seats = updates_all_seats_status(seats)
 
-    # Now stable, count the seats
+    # Now stable, count the occupied seats
     count = 0
     for row in seats:
         for seat in row:
