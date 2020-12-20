@@ -70,14 +70,24 @@ def calc_expression(expression):
     return number
 
 
+# Add a bunch of brackets so that + is done before *
+# This is a bit of a mess, ngl
 def add_brackets(expression):
     index = 0
     while index < len(expression):
-        if (expression[index] == "+") and (expression[index + 1] != "("):
+        if (
+            (expression[index] == "+")
+            and (expression[index + 1] != "(")
+            and (expression[index - 1] != ")")
+        ):
             expression.insert(index - 1, "(")
             expression.insert(index + 3, ")")
             index += 1
-        elif (expression[index] == "+") and (expression[index + 1] == "("):
+        elif (
+            (expression[index] == "+")
+            and (expression[index + 1] == "(")
+            and (expression[index - 1] != ")")
+        ):
             # Find the corresponding closing bracket
             bracket_stack = []
             for close_index in range(index + 2, len(expression)):
@@ -93,34 +103,14 @@ def add_brackets(expression):
             expression.insert(index - 1, "(")
             expression.insert(close_index + 1, ")")
             index += 1
-
-        index += 1
-
-
-# Given no brackets, this will do + first then * next
-def calc_bracketless_expression(expression):
-    add_brackets(expression)
-    return calc_expression(expression)
-
-
-def build_bracketless_expression(expression):
-    operator = ""
-
-    index = 0
-    while index < len(expression):
-        symbol = expression[index]
-        # Check if it is an operator
-        if (symbol == "*") or (symbol == "+"):
-            operator = symbol
-            index += 1
-            continue
-
-        # If bracket, work out the value for the expression in bracket
-        # first
-        if symbol == "(":
+        elif (
+            (expression[index] == "+")
+            and (expression[index + 1] == "(")
+            and (expression[index - 1] == ")")
+        ):
             # Find the corresponding closing bracket
             bracket_stack = []
-            for close_index in range(index + 1, len(expression)):
+            for close_index in range(index + 2, len(expression)):
                 if (expression[close_index] == ")") and (bracket_stack == []):
                     # found closing index
                     break
@@ -130,28 +120,57 @@ def build_bracketless_expression(expression):
                 elif expression[close_index] == "(":
                     bracket_stack.append("(")
 
-            next_number = calc_expression(expression[index + 1 : close_index])
-            index = close_index
-        else:
-            # It must be a number
-            next_number = int(symbol)
+            bracket_stack = []
+            open_index = index - 2
+            while True:
+                if (expression[open_index] == "(") and (bracket_stack == []):
+                    # found closing index
+                    break
+                elif expression[open_index] == "(":
+                    # found 1 close bracket.
+                    bracket_stack.pop()
+                elif expression[open_index] == ")":
+                    bracket_stack.append(")")
+                open_index -= 1
 
-        if operator == "*":
-            number *= next_number
-        elif operator == "+":
-            number += next_number
-        elif operator == "":
-            number = next_number
+            expression.insert(open_index, "(")
+            expression.insert(close_index + 1, ")")
+
+            index += 1
+
+        elif (expression[index] == "+") and (expression[index - 1] == ")"):
+            # Find the corresponding open bracket
+            bracket_stack = []
+            open_index = index - 2
+
+            while True:
+                if (expression[open_index] == "(") and (bracket_stack == []):
+                    # found closing index
+                    break
+                elif expression[open_index] == "(":
+                    # found 1 close bracket.
+                    bracket_stack.pop()
+                elif expression[open_index] == ")":
+                    bracket_stack.append(")")
+                open_index -= 1
+
+            expression.insert(open_index, "(")
+            expression.insert(index + 3, ")")
+            index += 1
 
         index += 1
 
-    return number
+
+# This will do + first then * next
+def calc_expression_plus_first(expression):
+    add_brackets(expression)
+    return calc_expression(expression)
 
 
 def part2_solve(expressions):
     sum = 0
     for expression in expressions:
-        print(calc_bracketless_expression(expression))
+        sum += calc_expression_plus_first(expression)
 
     return sum
 
@@ -160,5 +179,5 @@ if __name__ == "__main__":
     input = parse_input(get_input(PATH + "test_input"))
     print(part2_solve(input))
 
-    # input = parse_input(get_input(PATH + "real_input"))
-    # print(part2_solve(input))
+    input = parse_input(get_input(PATH + "real_input"))
+    print(part2_solve(input))
