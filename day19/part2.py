@@ -124,15 +124,6 @@ def part1_solve(rules, messages):
         # 0
         if message in rules["0"]:
             count += 1
-        # elif message[: len(rules["42"][0])] in rules["42"]:
-        #     print("in here")
-        #     print("42 len is: ", len(rules["42"][0]))
-        #     print("message is ", message)
-        #     print("message len is: ", len(message))
-        #     print("looking for: ", message[len(rules["42"][0]) :])
-        #     print("looking for len is: ", len(message[len(rules["42"][0]) :]))
-        #     count += 1
-        # 42 0
         elif (message[: len(rules["42"][0])] in rules["42"]) and (
             message[len(rules["42"][0]) :] in rules["0"]
         ):
@@ -244,20 +235,7 @@ def part1_solve(rules, messages):
         ):
             count += 1
             # print(message)
-        # elif message[: len(rules["42"][0])] in rules["42"]:
-        #     print("in here")
-        #     print("31 len is: ", len(rules["31"][0]))
-        #     print("message is ", message)
-        #     print("message len is: ", len(message))
-        #     print("42 len is: ", len(rules["42"][0]))
-        #     print(
-        #         "looking for: ",
-        #         message[len(rules["42"][0]) : len(message) - len(rules["31"][0])],
-        #     )
-        #     print(
-        #         "looking for len is: ",
-        #         len(message[len(rules["42"][0]) : len(message) - len(rules["31"][0])]),
-        #     )
+
         #  42 0 31
         elif (
             (message[: len(rules["42"][0])] in rules["42"])
