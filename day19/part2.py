@@ -59,37 +59,6 @@ def resolve_rule(rule_num, resolved_rules, rules, recursion_count):
 
     rule = rules[rule_num]
 
-    # Special code to handle these pesky loops
-    """
-    if (rule_num == "8") or (rule_num == "11"):
-        base = []
-        repeater = []
-
-        rule_command = rule.split(" ")
-
-        current_messages = "left"
-
-        for char in rule_command:
-            if char == "|":
-                current_messages = "right"
-            else:
-                if char == rule_num:
-                    recursive_messages = base
-                    for _ in range(2):
-                        recursive_messages += get_combos(recursive_messages, repeater)
-                    resolved_rules[rule_num] = recursive_messages
-                    return
-                else:
-                    if char not in resolved_rules:
-                        resolve_rule(char, resolved_rules, rules, recursion_count)
-
-                    message = resolved_rules[char]
-
-                    if current_messages == "left":
-                        base = get_combos(base, message)
-                    else:
-                        repeater = get_combos(repeater, message)
-    """
     if rule.startswith('"'):
         resolved_rules[rule_num] = [rule[1:-1]]
     else:
@@ -104,7 +73,7 @@ def resolve_rule(rule_num, resolved_rules, rules, recursion_count):
             if char == "|":
                 current_messages = "right"
 
-                if recursion_count > 1:
+                if recursion_count > 0:
                     break
             else:
                 if char not in resolved_rules:
@@ -112,6 +81,9 @@ def resolve_rule(rule_num, resolved_rules, rules, recursion_count):
                     # assert char != rule_num
                     if char == rule_num:
                         recursion_count += 1
+
+                    # not current using the recursive one, so error if in here
+                    assert char != rule_num
 
                     resolve_rule(char, resolved_rules, rules, recursion_count)
 
@@ -142,17 +114,340 @@ def resolve_rules(rules):
 def part1_solve(rules, messages):
     rules = resolve_rules(rules)
 
+    # print("42 is: ", rules["42"])
+    # print("11 is: ", rules["11"])
+    # print("31 is: ", rules["31"])
+
     count = 0
+
     for message in messages:
+        # 0
         if message in rules["0"]:
             count += 1
+        # elif message[: len(rules["42"][0])] in rules["42"]:
+        #     print("in here")
+        #     print("42 len is: ", len(rules["42"][0]))
+        #     print("message is ", message)
+        #     print("message len is: ", len(message))
+        #     print("looking for: ", message[len(rules["42"][0]) :])
+        #     print("looking for len is: ", len(message[len(rules["42"][0]) :]))
+        #     count += 1
+        # 42 0
+        elif (message[: len(rules["42"][0])] in rules["42"]) and (
+            message[len(rules["42"][0]) :] in rules["0"]
+        ):
+            count += 1
+            # print(message)
+        # 42 42 0
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (message[2 * len(rules["42"][0]) :] in rules["0"])
+        ):
+            count += 1
+            # print(message)
+        # 42 42 42 0
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[len(rules["42"][0] * 2) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[3 * len(rules["42"][0]) :] in rules["0"])
+        ):
+            count += 1
+            # print(message)
+        # 42 42 42 42 0
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[len(rules["42"][0] * 2) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 3) : 4 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[4 * len(rules["42"][0]) :] in rules["0"])
+        ):
+            count += 1
+            # print(message)
+        # 42 42 42 42 42 0
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[len(rules["42"][0] * 2) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 3) : 4 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 4) : 5 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[5 * len(rules["42"][0]) :] in rules["0"])
+        ):
+            count += 1
+        # 42 42 42 42 42 42 0
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[len(rules["42"][0] * 2) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 3) : 4 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 4) : 5 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 5) : 6 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[6 * len(rules["42"][0]) :] in rules["0"])
+        ):
+            count += 1
+        # 42 42 42 42 42 42 42 0
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[len(rules["42"][0] * 2) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 3) : 4 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 4) : 5 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 5) : 6 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0] * 6) : 7 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[7 * len(rules["42"][0]) :] in rules["0"])
+        ):
+            count += 1
+            # print(message)
+        # elif message[: len(rules["42"][0])] in rules["42"]:
+        #     print("in here")
+        #     print("31 len is: ", len(rules["31"][0]))
+        #     print("message is ", message)
+        #     print("message len is: ", len(message))
+        #     print("42 len is: ", len(rules["42"][0]))
+        #     print(
+        #         "looking for: ",
+        #         message[len(rules["42"][0]) : len(message) - len(rules["31"][0])],
+        #     )
+        #     print(
+        #         "looking for len is: ",
+        #         len(message[len(rules["42"][0]) : len(message) - len(rules["31"][0])]),
+        #     )
+        #  42 0 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (
+                message[len(rules["42"][0]) : len(message) - len(rules["31"][0])]
+                in rules["0"]
+            )
+        ):
+            count += 1
+            # print(message)
 
+        #  42 42 0 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (message[len(rules["42"][0]) * 2 : -len(rules["31"][0])] in rules["0"])
+        ):
+            count += 1
+            # print(message)
+        #  42 42 42 0 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[len(rules["42"][0]) * 2 : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (message[len(rules["42"][0]) * 3 : -len(rules["31"][0])] in rules["0"])
+        ):
+            count += 1
+            # print(message)
+        #  42 42 42 42 0 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[len(rules["42"][0]) * 2 : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0]) * 3 : 4 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (message[len(rules["42"][0]) * 4 : -len(rules["31"][0])] in rules["0"])
+        ):
+            count += 1
+
+        #  42 42 42 42 42 0 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[len(rules["42"][0]) * 2 : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0]) * 3 : 4 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[len(rules["42"][0]) * 4 : 5 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (message[len(rules["42"][0]) * 5 : -len(rules["31"][0])] in rules["0"])
+        ):
+            count += 1
+            # print(message)
+
+        #  42 42 0 31 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (
+                message[-len(rules["31"][0]) * 2 : -len(rules["31"][0])] in rules["31"]
+            )
+            and (
+                message[len(rules["42"][0]) * 2 : -2 * len(rules["31"][0])]
+                in rules["0"]
+            )
+        ):
+            count += 1
+            # print(message)
+
+        #   42 42 42 0 31 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[2 * len(rules["42"][0]) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (
+                message[-len(rules["31"][0]) * 2 : -len(rules["31"][0])] in rules["31"]
+            )
+            and (
+                message[len(rules["42"][0]) * 3 : -2 * len(rules["31"][0])]
+                in rules["0"]
+            )
+        ):
+            count += 1
+            # print(message)
+
+        #    42 42 42 42 0 31 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[2 * len(rules["42"][0]) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[3 * len(rules["42"][0]) : 4 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (
+                message[-len(rules["31"][0]) * 2 : -len(rules["31"][0])] in rules["31"]
+            )
+            and (
+                message[len(rules["42"][0]) * 4 : -2 * len(rules["31"][0])]
+                in rules["0"]
+            )
+        ):
+            count += 1
+            # print(message)
+
+        # 42 42 42 0 31 31 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[2 * len(rules["42"][0]) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (
+                message[-len(rules["31"][0]) * 2 : -len(rules["31"][0])] in rules["31"]
+            )
+            and (
+                message[-len(rules["31"][0]) * 3 : -len(rules["31"][0]) * 2]
+                in rules["31"]
+            )
+            and (
+                message[len(rules["42"][0]) * 3 : -3 * len(rules["31"][0])]
+                in rules["0"]
+            )
+        ):
+            count += 1
+            # print(message)
+
+        # 42 42 42 42 0 31 31 31
+        elif (
+            (message[: len(rules["42"][0])] in rules["42"])
+            and (message[len(rules["42"][0]) : 2 * len(rules["42"][0])] in rules["42"])
+            and (
+                message[2 * len(rules["42"][0]) : 3 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (
+                message[3 * len(rules["42"][0]) : 4 * len(rules["42"][0])]
+                in rules["42"]
+            )
+            and (message[-len(rules["31"][0]) :] in rules["31"])
+            and (
+                message[-len(rules["31"][0]) * 2 : -len(rules["31"][0])] in rules["31"]
+            )
+            and (
+                message[-len(rules["31"][0]) * 3 : -len(rules["31"][0]) * 2]
+                in rules["31"]
+            )
+            and (
+                message[len(rules["42"][0]) * 4 : -3 * len(rules["31"][0])]
+                in rules["0"]
+            )
+        ):
+            count += 1
+            # print(message)
     return count
 
 
 if __name__ == "__main__":
-    rules, messages = parse_input(get_input(PATH + "test_input_1"))
+    rules, messages = parse_input(get_input(PATH + "test_input"))
     print(part1_solve(rules, messages))
 
-    # rules, messages = parse_input(get_input(PATH + "real_input"))
-    # print(part1_solve(rules, messages))
+    rules, messages = parse_input(get_input(PATH + "real_input"))
+    print(part1_solve(rules, messages))
