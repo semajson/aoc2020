@@ -121,7 +121,7 @@ def part2_solve(rules, messages):
     # all rules in rules[42] and rules[31] are of length 8
     for message in messages:
         step = len(rules["42"][0])
-        # step through in 8 char bits
+        # step will be 8 chars for our dataset, but keep it general
         if (len(message) % step) != 0:
             continue
 
