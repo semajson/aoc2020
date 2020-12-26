@@ -117,6 +117,11 @@ class CupGame:
 
 
 def part1_solve(game):
+    game.play(100)
+    return game.get_cups_after_one()
+
+
+def part2_solve(game):
     game.play(10000000)
     return game.get_prod_2_cups_after_1()
 
@@ -125,5 +130,5 @@ if __name__ == "__main__":
     input = parse_input(get_input(PATH + "test_input"))
     print(part1_solve(input))
 
-    input = parse_input(get_input(PATH + "real_input"))
-    print(part1_solve(input))
+    # input = parse_input(get_input(PATH + "real_input"))
+    # print(part1_solve(input))
