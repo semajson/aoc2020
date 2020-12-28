@@ -105,17 +105,17 @@ class Tiles:
         return white_tiles
 
     def run_day(self):
-        new_black_tiles = []
+        new_black_tiles = set()
 
         for black_tile in self.black_tiles:
             surr_black = self.count_surr_black(black_tile)
             if (surr_black == 1) or (surr_black == 2):
-                new_black_tiles.append(black_tile)
+                new_black_tiles.add(black_tile)
 
         for white_tile in self.white_tiles_to_update():
             surr_black = self.count_surr_black(white_tile)
             if surr_black == 2:
-                new_black_tiles.append(white_tile)
+                new_black_tiles.add(white_tile)
 
         self.black_tiles = new_black_tiles
 
