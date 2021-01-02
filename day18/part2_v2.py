@@ -22,6 +22,28 @@ PATH = "day18/"
 # nud = function,  null denotation, e.g. whe have "- 4 + 5", "-" isn't acting on previous number, so call nud method
 # led =  function (left denotation). e.g., in above we would call led for "+" operator to act on 4
 
+# Main way this works
+# "A O_1 B O_2 C"
+# Hit first operator token O_1, it has a binding power x
+# look at next operator token O_2, if the binding power y is less than/equal to x, then evaluate A O_1 B.
+#   e.g. if A - B - C, will do (A-B) first (O_1 binding = O_2 binding)
+#        or if A / B - C, will do (A / B) first as O_1 biding >= 0_2 binding
+# if binding of O_1 is less than O_2, call expression on O_2 first
+#   e.g. A - B / C, will do (B / C) first here
+#
+# Key is:
+# def expression(rbp=0):
+#     ...
+#     while rbp < token.lbp:
+#         t = token
+#         token = next()
+#         left = t.led(left)
+#
+# If pass in rbp is 0, will keep doing through loop until find another 0. e.g. "(" nud calls expression(rbp =0), and ")" is lbp = 0, so will step through till find other bracket
+# if rpb is really high, e.g 100, we will only do 1 pass of expression. e.g. nup for "-" operator in "-4 +5" is expression(100), so left will be -4 initially
+#
+# basically, if hit high order operator, will break out and evaluate high order operator first
+
 
 def get_input(filename):
     my_file = open(filename, "r")
