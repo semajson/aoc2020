@@ -21,6 +21,9 @@ class ChildNodeLink:
         self.number = number
 
 
+# Hmm, this might not strictly be a tree as it can have loops, i.e.
+# more than one path to get between different nodes.
+# It is instead just a map
 class TreeNode:
     def __init__(self, bag_colour):
         self.bag_colour = bag_colour
@@ -161,3 +164,25 @@ if __name__ == "__main__":
 
     # real_input = parse_input(get_input("real_input"))
     # print(part1_solve(real_input))
+
+# notes after the fact
+# hotham has list of [bag: bag object, contains:[(count, bag), (count, bag)]]
+
+# could have just had the stuff above, bag, contains information. that would have been enough for this problem.
+# maybe have a hash
+# key = bag colour, value = contains
+# using this big connected map was a bit overkill here
+
+# and then done work on the hash table instead of a big connected tree here.
+# look at:
+# - https://github.com/codedstructure/aoc2020/blob/main/day7/__main__.py
+# - https://github.com/dimbleby/advent-of-code-2020/blob/master/src/day07.rs
+
+
+# i think to solve without backpointers, we really need to have a list (or indeed dict) of all the nodes.
+# then can:
+# - go through all the nodes (i.e. bags)
+# - check if children (recursively) can be gold bag for a node, if true, return the bag :)
+# - count number of nodes that can contain gold bag
+# - however, don't have an easy way to do that with the current datastructure, as isn't easy way to find
+# all nodes without using the parent pointers :/
